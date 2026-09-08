@@ -23,22 +23,67 @@ $$('[data-toggle-password]').forEach(toggle => toggle.addEventListener('click', 
 const loginForm = $('#loginForm');
 if (loginForm) loginForm.addEventListener('submit', async event => {
   event.preventDefault();
+  const submitButton = loginForm.querySelector('button[type="submit"]');
+  const identifier = $('#loginUsername').value.trim();
+  const password = $('#loginPassword').value;
+
+  if (!identifier || !password) {
+    toast('Enter both your email and password.');
+    return;
+  }
+
+  submitButton.disabled = true;
+  submitButton.textContent = 'Signing in...';
+
   try {
-    const result = await API.request('/auth/login', { method: 'POST', body: JSON.stringify({ identifier: $('#loginUsername').value.trim(), password: $('#loginPassword').value }) });
+    const result = await API.request('/auth/login', { method: 'POST', body: JSON.stringify({ identifier, password }) });
     API.setToken(result.token);
-    window.location.href = 'dashboard.html';
-  } catch (error) { showError(error); }
+    window.location.href = '/dashboard';
+  } catch (error) {
+    showError(error);
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Enter workspace';
+  }
 });
 
 const signupForm = $('#signupForm');
 if (signupForm) signupForm.addEventListener('submit', async event => {
   event.preventDefault();
-  if ($('#signupPassword').value !== $('#confirmPassword').value) return toast('Passwords do not match.');
+  const fullName = $('#fullName').value.trim();
+  const username = $('#signupUsername').value.trim();
+  const email = $('#signupEmail').value.trim();
+  const password = $('#signupPassword').value;
+  const confirmPassword = $('#confirmPassword').value;
+  const role = $('#signupRole') ? $('#signupRole').value : 'Employee';
+
+  if (!fullName || !username || !email || !password) {
+    toast('Please complete all required fields.');
+    return;
+  }
+  if (password.length < 8) {
+    toast('Passwords must be at least 8 characters long.');
+    return;
+  }
+  if (password !== confirmPassword) {
+    toast('Passwords do not match.');
+    return;
+  }
+
+  const submitButton = signupForm.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+  submitButton.textContent = 'Creating workspace...';
+
   try {
-    const result = await API.request('/auth/signup', { method: 'POST', body: JSON.stringify({ name: $('#fullName').value.trim(), username: $('#signupUsername').value.trim(), email: $('#signupEmail').value.trim(), password: $('#signupPassword').value }) });
+    const result = await API.request('/auth/signup', { method: 'POST', body: JSON.stringify({ name: fullName, username, email, password, role }) });
     API.setToken(result.token);
-    window.location.href = 'dashboard.html';
-  } catch (error) { showError(error); }
+    window.location.href = '/dashboard';
+  } catch (error) {
+    showError(error);
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Create workspace';
+  }
 });
 
 async function requireUser() {

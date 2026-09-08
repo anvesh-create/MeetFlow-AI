@@ -3,15 +3,16 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 function tokenFor(user) { return jwt.sign({ sub: user._id.toString() }, process.env.JWT_SECRET, { expiresIn: '7d' }); }
-function safeUser(user) { return { id: user._id, name: user.name, username: user.username, email: user.email, createdAt: user.createdAt }; }
+function safeUser(user) { return { id: user._id, name: user.name, username: user.username, email: user.email, role: user.role || 'Employee', createdAt: user.createdAt }; }
 
 async function signup(req, res, next) {
   try {
-    const { name, username, email, password } = req.body;
+    const { name, username, email, password, role } = req.body;
     if (!name || !username || !email || !password) return res.status(400).json({ message: 'Name, username, email, and password are required.' });
     if (password.length < 8) return res.status(400).json({ message: 'Password must be at least 8 characters.' });
+    const finalRole = ['Employee', 'Manager'].includes(role) ? role : 'Employee';
     const passwordHash = await bcrypt.hash(password, 12);
-    const user = await User.create({ name, username, email, passwordHash });
+    const user = await User.create({ name, username, email, role: finalRole, passwordHash });
     res.status(201).json({ user: safeUser(user), token: tokenFor(user) });
   } catch (error) { next(error); }
 }
