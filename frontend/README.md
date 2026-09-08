@@ -1,0 +1,1 @@
+The root HTML/CSS/JS files are the served frontend for the first full-stack upgrade. They remain at the project root so existing links and Live Server workflows continue to work; the Express server serves them alongside `/api`.

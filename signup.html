@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create account | MeetFlow AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page">
+  <div class="auth-orbit orbit-one"></div><div class="auth-orbit orbit-two"></div>
+  <main class="auth-shell auth-shell-compact">
+    <a class="brand auth-brand" href="index.html"><span class="brand-mark">M</span><span>MEETFLOW <b>AI</b></span></a>
+    <section class="auth-card signup-card reveal"><div class="card-kicker">START YOUR WORKFLOW</div><h1>Create your workspace</h1><p class="muted">Give your team a place where every commitment has an owner.</p>
+      <form id="signupForm" class="form-stack">
+        <label>Full name<input id="fullName" type="text" placeholder="Alex Morgan" required></label>
+        <label>Username<input id="signupUsername" type="text" placeholder="alex.morgan" required></label>
+        <label>Work email<input id="signupEmail" type="email" placeholder="alex@company.com" required></label>
+        <div class="form-grid"><label>Password <span class="label-action" data-toggle-password="signupPassword">Show</span><input id="signupPassword" type="password" placeholder="8+ characters" minlength="8" required></label><label>Confirm password<input id="confirmPassword" type="password" placeholder="Repeat password" minlength="8" required></label></div>
+        <label class="check-label"><input id="terms" type="checkbox" required> I agree to the workspace terms</label>
+        <button class="button button-primary button-full" type="submit">Create workspace <span>↗</span></button>
+      </form>
+      <p class="auth-switch">Already have an account? <a class="text-link" href="index.html">Log in</a></p>
+    </section>
+  </main>
+  <div id="toast" class="toast" role="status"></div><script src="js/api.js"></script><script src="js/script.js"></script>
+</body>
+</html>
